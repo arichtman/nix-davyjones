@@ -34,5 +34,20 @@
           };
         };
       });
+      nixosModules = forEachSupportedSystem ({ pkgs }: {
+        default = import ./module.nix;
+      });
+      nixosConfigurations = forEachSupportedSystem ({ pkgs, system }: {
+        # test = import ./test.nix;
+        test = pkgs.lib.nixosSystem {
+          inherit system;
+          # system = "${system}";
+          # system = "x86_64-linux";
+          modules = import ./module.nix;
+          services.davyjones = {
+            enable = true;
+          };
+        };
+      });
     };
 }
